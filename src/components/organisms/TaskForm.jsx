@@ -149,12 +149,12 @@ const FileUpload = ({ files, onFilesChange, className = "" }) => {
 }
 const TaskForm = ({ task, lists, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
-title: task?.title || "",
-    description: task?.description || "",
-    priority: task?.priority || "medium",
-    dueDate: task?.dueDate ? formatDateForInput(task.dueDate) : "",
-    listId: task?.listId || lists[0]?.id || "",
-    attachments: task?.attachments || []
+title: task?.title_c || "",
+    description: task?.description_c || "",
+    priority: task?.priority_c || "medium",
+    dueDate: task?.dueDate_c ? formatDateForInput(task.dueDate_c) : "",
+    listId: task?.listId_c?.Id || task?.listId_c || lists[0]?.Id || "",
+    attachments: task?.attachments_c || []
   })
 
   const [errors, setErrors] = useState({})
@@ -167,7 +167,7 @@ title: task?.title || "",
       newErrors.title = "Task title is required"
     }
     
-    if (!formData.listId) {
+if (!formData.listId) {
       newErrors.listId = "Please select a list"
     }
 
@@ -186,15 +186,16 @@ title: task?.title || "",
 
     try {
 const taskData = {
-        ...formData,
-        title: formData.title.trim(),
-        description: formData.description.trim(),
-        dueDate: formData.dueDate ? createDateFromInput(formData.dueDate) : null,
-        attachments: formData.attachments
+        title_c: formData.title.trim(),
+        description_c: formData.description.trim(),
+        priority_c: formData.priority,
+        dueDate_c: formData.dueDate ? createDateFromInput(formData.dueDate).toISOString().split('T')[0] : null,
+        listId_c: parseInt(formData.listId),
+        attachments_c: formData.attachments
       }
 
       if (task) {
-        await taskService.update(task.id, taskData)
+await taskService.update(task.Id, taskData)
         toast.success("Task updated successfully!")
       } else {
         await taskService.create(taskData)
@@ -274,7 +275,7 @@ const handleInputChange = (field, value) => {
 
             <FormField label="List" required error={errors.listId}>
               <TaskListSelector
-                value={formData.listId}
+value={formData.listId}
                 onChange={(value) => handleInputChange("listId", value)}
                 lists={lists}
               />

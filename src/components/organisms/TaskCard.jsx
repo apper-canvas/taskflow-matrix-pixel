@@ -14,9 +14,9 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
   const handleToggleComplete = async () => {
     setLoading(true)
     try {
-      const updatedTask = await taskService.update(task.id, {
-        completed: !task.completed,
-        completedAt: !task.completed ? new Date().toISOString() : null
+const updatedTask = await taskService.update(task.Id, {
+        completed_c: !task.completed_c,
+        completedAt_c: !task.completed_c ? new Date().toISOString() : null
       })
       
       if (!task.completed) {
@@ -42,7 +42,7 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
 
     setLoading(true)
     try {
-      await taskService.delete(task.id)
+await taskService.delete(task.Id)
       toast.success("Task deleted successfully")
       onUpdate?.()
     } catch (error) {
@@ -59,17 +59,16 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
     low: { variant: "low", icon: "Minus" }
   }
 
-  const config = priorityConfig[task.priority] || priorityConfig.medium
+const config = priorityConfig[task.priority_c] || priorityConfig.medium
   const dueDateText = formatDueDate(task.dueDate)
-  const taskIsOverdue = isOverdue(task.dueDate)
-
+const taskIsOverdue = isOverdue(task.dueDate_c)
   return (
     <div className={`card p-4 transition-all duration-200 hover:-translate-y-0.5 ${task.completed ? "opacity-60" : ""}`}>
       <div className="flex items-start gap-3">
         <div className="checkbox-wrapper">
           <input
             type="checkbox"
-            checked={task.completed}
+checked={task.completed_c}
             onChange={handleToggleComplete}
             disabled={loading}
             className="mt-0.5"
@@ -78,13 +77,13 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <h3 className={`font-semibold text-gray-900 ${task.completed ? "line-through" : ""}`}>
+<h3 className={`font-semibold text-gray-900 ${task.completed_c ? "line-through" : ""}`}>
               {task.title}
             </h3>
             
             <div className="flex items-center gap-1">
               <button
-                onClick={() => onEdit?.(task)}
+onClick={() => onEdit?.(task)}
                 className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
                 disabled={loading}
               >
@@ -100,10 +99,10 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
             </div>
           </div>
 
-{task.description && (
+{task.description_c && (
             <div>
               <p className={`text-gray-600 text-sm mt-1 ${!isExpanded ? "line-clamp-2" : ""}`}>
-                {task.description}
+                {task.description_c}
               </p>
               {task.description.length > 100 && (
                 <button
@@ -116,7 +115,7 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
             </div>
           )}
 
-          {task.attachments && task.attachments.length > 0 && (
+{task.attachments_c && task.attachments_c.length > 0 && (
             <div className="mt-3 pt-3 border-t border-gray-100">
               <div className="flex items-center gap-2 mb-2">
                 <ApperIcon name="Paperclip" size={14} className="text-gray-500" />
@@ -125,7 +124,7 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-1">
-                {task.attachments.slice(0, isExpanded ? task.attachments.length : 2).map((file) => (
+{task.attachments_c.slice(0, isExpanded ? task.attachments_c.length : 2).map((file) => (
                   <div key={file.id} className="flex items-center gap-2 p-2 bg-gray-50 rounded text-xs">
                     <ApperIcon 
                       name={
@@ -161,11 +160,11 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
 
           <div className="flex items-center gap-3 mt-3">
             <Badge variant={config.variant} size="sm">
-              <ApperIcon name={config.icon} size={12} className="mr-1" />
-              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+<ApperIcon name={config.icon} size={12} className="mr-1" />
+              {task.priority_c.charAt(0).toUpperCase() + task.priority_c.slice(1)}
             </Badge>
 
-            {dueDateText && (
+{dueDateText && (
               <div className={`flex items-center gap-1 text-sm ${taskIsOverdue ? "text-red-600" : "text-gray-500"}`}>
                 <ApperIcon 
                   name={taskIsOverdue ? "AlertTriangle" : "Calendar"} 
@@ -175,7 +174,7 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
               </div>
             )}
 
-            {task.completed && task.completedAt && (
+{task.completed_c && task.completedAt_c && (
               <div className="flex items-center gap-1 text-sm text-green-600">
                 <ApperIcon name="CheckCircle" size={14} />
                 Completed

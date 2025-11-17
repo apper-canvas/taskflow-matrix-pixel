@@ -41,46 +41,46 @@ const TaskList = ({ selectedListId, onEditTask, onAddTask }) => {
     let filtered = tasks
 
     // Filter by selected list
-    if (selectedListId && selectedListId !== "all") {
-      filtered = filtered.filter(task => task.listId === selectedListId)
+if (selectedListId && selectedListId !== "all") {
+      filtered = filtered.filter(task => (task.listId_c?.Id || task.listId_c) === selectedListId)
     }
 
     // Filter by status
-    if (filters.status === "active") {
-      filtered = filtered.filter(task => !task.completed)
+if (filters.status === "active") {
+      filtered = filtered.filter(task => !task.completed_c)
     } else if (filters.status === "completed") {
-      filtered = filtered.filter(task => task.completed)
+filtered = filtered.filter(task => task.completed_c)
     }
 
     // Filter by priority
     if (filters.priority !== "all") {
-      filtered = filtered.filter(task => task.priority === filters.priority)
+filtered = filtered.filter(task => task.priority_c === filters.priority)
     }
 
     // Filter by search
     if (filters.search) {
       const search = filters.search.toLowerCase()
       filtered = filtered.filter(task =>
-        task.title.toLowerCase().includes(search) ||
-        task.description.toLowerCase().includes(search)
+task.title_c.toLowerCase().includes(search) ||
+        task.description_c.toLowerCase().includes(search)
       )
     }
 
     // Sort tasks
     filtered.sort((a, b) => {
       switch (filters.sort) {
-        case "dueDate":
-          if (!a.dueDate && !b.dueDate) return 0
-          if (!a.dueDate) return 1
-          if (!b.dueDate) return -1
-          return new Date(a.dueDate) - new Date(b.dueDate)
+case "dueDate":
+          if (!a.dueDate_c && !b.dueDate_c) return 0
+          if (!a.dueDate_c) return 1
+          if (!b.dueDate_c) return -1
+          return new Date(a.dueDate_c) - new Date(b.dueDate_c)
         case "priority":
           const priorityOrder = { high: 3, medium: 2, low: 1 }
-          return priorityOrder[b.priority] - priorityOrder[a.priority]
+          return priorityOrder[b.priority_c] - priorityOrder[a.priority_c]
         case "title":
-          return a.title.localeCompare(b.title)
+          return a.title_c.localeCompare(b.title_c)
         default: // created
-          return new Date(b.createdAt) - new Date(a.createdAt)
+          return new Date(b.CreatedOn) - new Date(a.CreatedOn)
       }
     })
 
@@ -91,13 +91,13 @@ const TaskList = ({ selectedListId, onEditTask, onAddTask }) => {
 
   // Calculate task counts
   const listTasks = selectedListId && selectedListId !== "all" 
-    ? tasks.filter(task => task.listId === selectedListId)
+? tasks.filter(task => (task.listId_c?.Id || task.listId_c) === selectedListId)
     : tasks
 
   const taskCounts = {
     all: listTasks.length,
-    active: listTasks.filter(task => !task.completed).length,
-    completed: listTasks.filter(task => task.completed).length
+active: listTasks.filter(task => !task.completed_c).length,
+    completed: listTasks.filter(task => task.completed_c).length
   }
 
   const handleTaskUpdate = () => {
@@ -141,7 +141,7 @@ const TaskList = ({ selectedListId, onEditTask, onAddTask }) => {
           <div className="space-y-3">
             {filteredTasks.map((task) => (
               <TaskCard
-                key={task.id}
+key={task.Id}
                 task={task}
                 onEdit={onEditTask}
                 onUpdate={handleTaskUpdate}

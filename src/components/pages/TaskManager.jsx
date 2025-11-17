@@ -68,11 +68,10 @@ const TaskManager = () => {
               >
                 <ApperIcon name="Menu" size={20} />
               </button>
-              
-              <div>
+<div>
                 <h2 className="text-2xl font-bold text-gray-900">
                   {selectedListId === "all" ? "All Tasks" : 
-                   lists.find(list => list.id === selectedListId)?.name || "Tasks"}
+                   lists.find(list => list.Id === selectedListId)?.name_c || "Tasks"}
                 </h2>
                 <p className="text-gray-600">
                   {selectedListId === "all" 

@@ -69,7 +69,7 @@ const TaskFilters = ({
 
       {/* Advanced Filters Toggle */}
       <div className="flex items-center justify-between">
-        <Button
+<Button
           variant="ghost"
           size="sm"
           onClick={() => setShowAdvanced(!showAdvanced)}
@@ -82,7 +82,7 @@ const TaskFilters = ({
           Advanced Filters
         </Button>
 
-        {(filters.priority !== "all" || filters.sort !== "created") && (
+{(filters.priority !== "all" || filters.sort !== "created") && (
           <Button
             variant="ghost"
             size="sm"
@@ -108,7 +108,7 @@ const TaskFilters = ({
               Priority
             </label>
             <select
-              value={filters.priority}
+value={filters.priority}
               onChange={(e) => handleFilterChange("priority", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none"
             >
@@ -125,7 +125,7 @@ const TaskFilters = ({
               Sort By
             </label>
             <select
-              value={filters.sort}
+value={filters.sort}
               onChange={(e) => handleFilterChange("sort", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none"
             >
