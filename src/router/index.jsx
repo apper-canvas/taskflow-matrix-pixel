@@ -13,6 +13,7 @@ const ErrorPage = lazy(() => import("@/components/pages/ErrorPage"))
 const ResetPassword = lazy(() => import("@/components/pages/ResetPassword"))
 const PromptPassword = lazy(() => import("@/components/pages/PromptPassword"))
 const NotFound = lazy(() => import("@/components/pages/NotFound"))
+const Projects = lazy(() => import("@/components/pages/Projects"))
 
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -62,9 +63,13 @@ const createRoute = ({
 };
 
 const mainRoutes = [
-  createRoute({
+createRoute({
     index: true,
     element: <TaskManager />
+  }),
+  createRoute({
+    path: 'projects',
+    element: <Projects />
   }),
   createRoute({
     path: "*",

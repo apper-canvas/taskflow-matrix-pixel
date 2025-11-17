@@ -5,15 +5,16 @@ import Sidebar from "@/components/organisms/Sidebar"
 import TaskList from "@/components/organisms/TaskList"
 import TaskForm from "@/components/organisms/TaskForm"
 import { listService } from "@/services/api/listService"
-
+import { projectService } from "@/services/api/projectService"
 const TaskManager = () => {
-  const [selectedListId, setSelectedListId] = useState("all")
+const [selectedListId, setSelectedListId] = useState("all")
   const [showTaskForm, setShowTaskForm] = useState(false)
   const [editingTask, setEditingTask] = useState(null)
   const [lists, setLists] = useState([])
+  const [projects, setProjects] = useState([])
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
-  // Load lists for the task form
+// Load lists and projects for the task form
   const loadLists = async () => {
     try {
       const listsData = await listService.getAll()
@@ -23,14 +24,25 @@ const TaskManager = () => {
     }
   }
 
-  const handleAddTask = () => {
+  const loadProjects = async () => {
+    try {
+      const projectsData = await projectService.getAll()
+      setProjects(projectsData)
+    } catch (error) {
+      console.error("Error loading projects:", error)
+    }
+  }
+
+const handleAddTask = () => {
     loadLists()
+    loadProjects()
     setEditingTask(null)
     setShowTaskForm(true)
   }
 
-  const handleEditTask = (task) => {
+const handleEditTask = (task) => {
     loadLists()
+    loadProjects()
     setEditingTask(task)
     setShowTaskForm(true)
   }
@@ -104,9 +116,10 @@ const TaskManager = () => {
 
       {/* Task Form Modal */}
       {showTaskForm && (
-        <TaskForm
+<TaskForm
           task={editingTask}
           lists={lists}
+          projects={projects}
           onSave={handleTaskFormSave}
           onCancel={handleTaskFormClose}
         />

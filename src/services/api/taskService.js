@@ -14,7 +14,7 @@ class TaskService {
       }
 
       const params = {
-        fields: [
+fields: [
           {"field": {"Name": "Id"}},
           {"field": {"Name": "title_c"}},
           {"field": {"Name": "description_c"}},
@@ -24,6 +24,7 @@ class TaskService {
           {"field": {"Name": "completedAt_c"}},
           {"field": {"Name": "archived_c"}},
           {"field": {"Name": "listId_c"}},
+          {"field": {"Name": "projectId_c"}},
           {"field": {"Name": "attachments_c"}},
           {"field": {"Name": "CreatedOn"}}
         ],
@@ -54,7 +55,7 @@ class TaskService {
       }
 
       const params = {
-        fields: [
+fields: [
           {"field": {"Name": "Id"}},
           {"field": {"Name": "title_c"}},
           {"field": {"Name": "description_c"}},
@@ -64,6 +65,7 @@ class TaskService {
           {"field": {"Name": "completedAt_c"}},
           {"field": {"Name": "archived_c"}},
           {"field": {"Name": "listId_c"}},
+          {"field": {"Name": "projectId_c"}},
           {"field": {"Name": "attachments_c"}},
           {"field": {"Name": "CreatedOn"}}
         ]
@@ -97,7 +99,8 @@ class TaskService {
           dueDate_c: taskData.dueDate_c,
           completed_c: false,
           archived_c: false,
-          listId_c: taskData.listId_c ? parseInt(taskData.listId_c) : null,
+listId_c: taskData.listId_c ? parseInt(taskData.listId_c) : null,
+          projectId_c: taskData.projectId_c ? parseInt(taskData.projectId_c) : null,
           attachments_c: taskData.attachments_c || []
         }]
       }
@@ -149,8 +152,9 @@ class TaskService {
           ...(data.dueDate_c !== undefined && { dueDate_c: data.dueDate_c }),
           ...(data.completed_c !== undefined && { completed_c: data.completed_c }),
           ...(data.completedAt_c !== undefined && { completedAt_c: data.completedAt_c }),
-          ...(data.archived_c !== undefined && { archived_c: data.archived_c }),
+...(data.archived_c !== undefined && { archived_c: data.archived_c }),
           ...(data.listId_c !== undefined && { listId_c: data.listId_c ? parseInt(data.listId_c) : null }),
+          ...(data.projectId_c !== undefined && { projectId_c: data.projectId_c ? parseInt(data.projectId_c) : null }),
           ...(data.attachments_c !== undefined && { attachments_c: data.attachments_c })
         }]
       }

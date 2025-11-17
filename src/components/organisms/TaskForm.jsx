@@ -1,13 +1,13 @@
-import { useState } from "react"
-import { toast } from "react-toastify"
-import ApperIcon from "@/components/ApperIcon"
-import Button from "@/components/atoms/Button"
-import FormField from "@/components/molecules/FormField"
-import TaskPrioritySelector from "@/components/molecules/TaskPrioritySelector"
-import TaskListSelector from "@/components/molecules/TaskListSelector"
-import { formatDateForInput, createDateFromInput } from "@/utils/dateUtils"
-import { taskService } from "@/services/api/taskService"
-import { listService } from "@/services/api/listService"
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { taskService } from "@/services/api/taskService";
+import { listService } from "@/services/api/listService";
+import { createDateFromInput, formatDateForInput } from "@/utils/dateUtils";
+import ApperIcon from "@/components/ApperIcon";
+import TaskPrioritySelector from "@/components/molecules/TaskPrioritySelector";
+import FormField from "@/components/molecules/FormField";
+import TaskListSelector from "@/components/molecules/TaskListSelector";
+import Button from "@/components/atoms/Button";
 
 const FileUpload = ({ files, onFilesChange, className = "" }) => {
   const [isDragging, setIsDragging] = useState(false)
@@ -148,12 +148,13 @@ const FileUpload = ({ files, onFilesChange, className = "" }) => {
   )
 }
 const TaskForm = ({ task, lists, onSave, onCancel }) => {
-  const [formData, setFormData] = useState({
-title: task?.title_c || "",
+const [formData, setFormData] = useState({
+    title: task?.title_c || "",
     description: task?.description_c || "",
     priority: task?.priority_c || "medium",
     dueDate: task?.dueDate_c ? formatDateForInput(task.dueDate_c) : "",
     listId: task?.listId_c?.Id || task?.listId_c || lists[0]?.Id || "",
+    projectId: task?.projectId_c?.Id || task?.projectId_c || "",
     attachments: task?.attachments_c || []
   })
 
@@ -191,9 +192,9 @@ const taskData = {
         priority_c: formData.priority,
         dueDate_c: formData.dueDate ? createDateFromInput(formData.dueDate).toISOString().split('T')[0] : null,
         listId_c: parseInt(formData.listId),
+        projectId_c: formData.projectId ? parseInt(formData.projectId) : null,
         attachments_c: formData.attachments
       }
-
       if (task) {
 await taskService.update(task.Id, taskData)
         toast.success("Task updated successfully!")
@@ -272,15 +273,22 @@ const handleInputChange = (field, value) => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all duration-200"
               />
             </FormField>
-
-            <FormField label="List" required error={errors.listId}>
+<FormField label="List" required error={errors.listId}>
               <TaskListSelector
-value={formData.listId}
+                value={formData.listId}
                 onChange={(value) => handleInputChange("listId", value)}
                 lists={lists}
               />
             </FormField>
 
+{/* Project selector temporarily disabled - ProjectSelector component not available */}
+            {/* <FormField label="Project" error={errors.projectId}>
+              <ProjectSelector
+                value={formData.projectId}
+                onChange={(value) => handleInputChange("projectId", value)}
+                projects={projects}
+              />
+            </FormField> */}
             <FormField label="Attachments">
               <FileUpload
                 files={formData.attachments}

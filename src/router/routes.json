@@ -82,6 +82,11 @@
           }
         ]
       }
+},
+    "projects": {
+      "path": "/projects",
+      "protected": true,
+      "component": "Projects"
     }
   }
 }
