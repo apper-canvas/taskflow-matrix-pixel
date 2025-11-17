@@ -130,32 +130,38 @@ const Sidebar = ({ selectedListId, onSelectList, isMobileOpen, onMobileClose }) 
           </button>
 
           {/* Custom Lists */}
-          {lists.map((list) => (
-            <div key={list.id} className="group relative">
+{lists.map((list) => (
+            <div key={list.Id} className="group relative mb-1">
               <button
-                onClick={() => {
-                  onSelectList(list.id)
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onSelectList(list.Id)
                   onMobileClose?.()
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${
-                  selectedListId === list.id
-                    ? "bg-gradient-to-r from-primary/10 to-secondary/10 text-primary border-l-4 border-primary"
-                    : "text-gray-700 hover:bg-gray-50"
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-left relative ${
+                  selectedListId === list.Id
+                    ? "bg-gradient-to-r from-primary/10 to-secondary/10 text-primary border-l-4 border-primary shadow-sm"
+                    : "text-gray-700 hover:bg-gray-50 hover:shadow-sm"
                 }`}
               >
                 <div
-                  className="w-4 h-4 rounded-full"
-                  style={{ backgroundColor: list.color }}
+                  className="w-4 h-4 rounded-full flex-shrink-0 ring-1 ring-white shadow-sm"
+                  style={{ backgroundColor: list.color || '#6366f1' }}
                 />
-                <span className="flex-1 font-medium">{list.name}</span>
-                <span className="text-sm text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
-                  {getTaskCount(list.id)}
+                <span className="flex-1 font-medium text-sm leading-5 truncate pr-8">
+                  {list.name}
+                </span>
+                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full font-medium flex-shrink-0">
+                  {getTaskCount(list.Id)}
                 </span>
               </button>
               
               <button
-                onClick={() => handleDeleteList(list.id)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all rounded"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDeleteList(list.Id)
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all duration-200 rounded z-10"
               >
                 <ApperIcon name="Trash2" size={14} />
               </button>
