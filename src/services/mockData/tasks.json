@@ -1,0 +1,122 @@
+[
+  {
+    "Id": 1,
+    "title": "Complete project proposal",
+    "description": "Draft the quarterly project proposal for the marketing campaign including budget allocation, timeline, and resource requirements.",
+    "priority": "high",
+    "dueDate": "2024-01-15T23:59:59.000Z",
+    "listId": "work",
+    "completed": false,
+    "createdAt": "2024-01-10T09:30:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "Id": 2,
+    "title": "Review team performance",
+    "description": "Conduct quarterly performance reviews for all team members and prepare feedback reports.",
+    "priority": "medium",
+    "dueDate": "2024-01-20T17:00:00.000Z",
+    "listId": "work",
+    "completed": false,
+    "createdAt": "2024-01-08T14:15:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "Id": 3,
+    "title": "Buy groceries for dinner party",
+    "description": "Get fresh ingredients for the weekend dinner party: salmon, vegetables, wine, and dessert items.",
+    "priority": "medium",
+    "dueDate": "2024-01-12T18:00:00.000Z",
+    "listId": "personal",
+    "completed": true,
+    "createdAt": "2024-01-09T11:20:00.000Z",
+    "completedAt": "2024-01-11T16:45:00.000Z",
+    "archived": false
+  },
+  {
+    "Id": 4,
+    "title": "Schedule dentist appointment",
+    "description": "Book a routine cleaning and checkup with Dr. Smith for next month.",
+    "priority": "low",
+    "dueDate": null,
+    "listId": "personal",
+    "completed": false,
+    "createdAt": "2024-01-07T10:00:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "Id": 5,
+    "title": "Update website content",
+    "description": "Refresh the homepage with new product announcements and update the about us section.",
+    "priority": "high",
+    "dueDate": "2024-01-18T12:00:00.000Z",
+    "listId": "work",
+    "completed": false,
+    "createdAt": "2024-01-06T13:45:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "Id": 6,
+    "title": "Plan weekend hiking trip",
+    "description": "Research trails, check weather forecast, and pack necessary gear for a day hike.",
+    "priority": "low",
+    "dueDate": "2024-01-14T08:00:00.000Z",
+    "listId": "personal",
+    "completed": false,
+    "createdAt": "2024-01-05T19:30:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "Id": 7,
+    "title": "Prepare client presentation",
+    "description": "Create slides and rehearse the quarterly business review presentation for the Johnson account.",
+    "priority": "high",
+    "dueDate": "2024-01-16T10:00:00.000Z",
+    "listId": "work",
+    "completed": false,
+    "createdAt": "2024-01-04T16:20:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "Id": 8,
+    "title": "Organize home office",
+    "description": "Declutter desk, organize files, and set up better lighting for improved productivity.",
+    "priority": "medium",
+    "dueDate": null,
+    "listId": "personal",
+    "completed": true,
+    "createdAt": "2024-01-03T12:10:00.000Z",
+    "completedAt": "2024-01-09T15:30:00.000Z",
+    "archived": false
+  },
+  {
+    "Id": 9,
+    "title": "Research new software tools",
+    "description": "Evaluate project management software options and prepare comparison report for team review.",
+    "priority": "medium",
+    "dueDate": "2024-01-22T17:00:00.000Z",
+    "listId": "work",
+    "completed": false,
+    "createdAt": "2024-01-02T09:15:00.000Z",
+    "completedAt": null,
+    "archived": false
+  },
+  {
+    "Id": 10,
+    "title": "Call mom for birthday",
+    "description": "Don't forget to wish mom a happy birthday and catch up on family news.",
+    "priority": "high",
+    "dueDate": "2024-01-13T20:00:00.000Z",
+    "listId": "personal",
+    "completed": false,
+    "createdAt": "2024-01-01T18:45:00.000Z",
+    "completedAt": null,
+    "archived": false
+  }
+]
