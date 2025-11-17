@@ -104,7 +104,7 @@ onClick={() => onEdit?.(task)}
               <p className={`text-gray-600 text-sm mt-1 ${!isExpanded ? "line-clamp-2" : ""}`}>
                 {task.description_c}
               </p>
-              {task.description.length > 100 && (
+              {task.description_c && task.description_c.length > 100 && (
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
                   className="text-primary text-sm hover:text-secondary transition-colors mt-1"
@@ -120,7 +120,7 @@ onClick={() => onEdit?.(task)}
               <div className="flex items-center gap-2 mb-2">
                 <ApperIcon name="Paperclip" size={14} className="text-gray-500" />
                 <span className="text-xs font-medium text-gray-700">
-                  {task.attachments.length} Attachment{task.attachments.length > 1 ? 's' : ''}
+{task.attachments_c?.length || 0} Attachment{(task.attachments_c?.length || 0) > 1 ? 's' : ''}
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-1">
@@ -146,12 +146,12 @@ onClick={() => onEdit?.(task)}
                     </a>
                   </div>
                 ))}
-                {!isExpanded && task.attachments.length > 2 && (
+{!isExpanded && (task.attachments_c?.length || 0) > 2 && (
                   <button
                     onClick={() => setIsExpanded(true)}
                     className="text-xs text-primary hover:text-secondary transition-colors text-left p-1"
                   >
-                    +{task.attachments.length - 2} more files
+                    +{(task.attachments_c?.length || 0) - 2} more files
                   </button>
                 )}
               </div>
