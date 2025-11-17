@@ -6,10 +6,10 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: '#6366f1',
-        secondary: '#8b5cf6',
-        accent: '#ec4899',
+colors: {
+        primary: '#3b82f6',
+        secondary: '#0ea5e9',
+        accent: '#06b6d4',
         surface: '#ffffff',
         background: '#f8fafc',
         success: '#10b981',

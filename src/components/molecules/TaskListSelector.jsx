@@ -1,5 +1,5 @@
-import { useState } from "react"
-import ApperIcon from "@/components/ApperIcon"
+import React, { useState } from "react";
+import ApperIcon from "@/components/ApperIcon";
 
 const TaskListSelector = ({ value, onChange, lists = [] }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -18,9 +18,9 @@ const TaskListSelector = ({ value, onChange, lists = [] }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 w-full text-left"
       >
-        <div
-          className="w-3 h-3 rounded-full"
-          style={{ backgroundColor: selectedList?.color || "#6366f1" }}
+<div
+          style={{ backgroundColor: selectedList?.color || "#3b82f6" }}
+          className="w-3 h-3 rounded-full flex-shrink-0"
         />
         <span className="flex-1">{selectedList?.name || "Select List"}</span>
         <ApperIcon name="ChevronDown" size={16} className="text-gray-400" />

@@ -17,8 +17,7 @@
   min-height: 48px;
 }
 
-.Toastify__toast--success {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
 
 .Toastify__toast--error {
@@ -26,30 +25,26 @@
 }
 
 .Toastify__toast--info {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
 }
 
 .Toastify__toast--warning {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
 }
 
 @layer components {
   .task-priority-high {
     @apply bg-gradient-to-r from-red-500 to-orange-500 text-white;
   }
-  
-  .task-priority-medium {
-    @apply bg-gradient-to-r from-purple-500 to-blue-500 text-white;
+.task-priority-medium {
+    @apply bg-gradient-to-r from-blue-500 to-sky-500 text-white;
   }
-  
   .task-priority-low {
     @apply bg-gradient-to-r from-gray-400 to-slate-500 text-white;
   }
-
-  .btn-primary {
+.btn-primary {
     @apply bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg hover:scale-[1.02] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50;
   }
-
   .btn-secondary {
     @apply bg-white border border-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50;
   }
@@ -57,8 +52,7 @@
   .card {
     @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100;
   }
-
-  .input-field {
+.input-field {
     @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all duration-200;
   }
 }
@@ -84,9 +78,9 @@
 /* Confetti animation styles */
 .confetti {
   position: fixed;
-  width: 10px;
+width: 10px;
   height: 10px;
-  background: #ec4899;
+  background: #06b6d4;
   animation: confetti-fall 3s linear forwards;
 }
 
@@ -117,10 +111,9 @@
   transition: all 0.2s ease;
   position: relative;
 }
-
 .checkbox-wrapper input[type="checkbox"]:checked {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  border-color: #10b981;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-color: #3b82f6;
   transform: scale(1.1);
 }
 
