@@ -12,7 +12,8 @@ const Projects = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showForm, setShowForm] = useState(false)
-  const [editingProject, setEditingProject] = useState(null)
+const [editingProject, setEditingProject] = useState(null)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [formData, setFormData] = useState({
     name_c: '',
     description_c: '',
@@ -229,10 +230,8 @@ const Projects = () => {
     }
   }
 
-  if (loading) return <Loading />
+if (loading) return <Loading />
   if (error) return <ErrorView message={error} onRetry={loadProjects} />
-
-const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
   return (
     <div className="flex h-screen bg-gray-50">
