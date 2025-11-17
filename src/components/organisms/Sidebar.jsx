@@ -138,20 +138,22 @@ const Sidebar = ({ selectedListId, onSelectList, isMobileOpen, onMobileClose }) 
                   onSelectList(list.Id)
                   onMobileClose?.()
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-left relative ${
+className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-left relative ${
                   selectedListId === list.Id
                     ? "bg-gradient-to-r from-primary/10 to-secondary/10 text-primary border-l-4 border-primary shadow-sm"
-                    : "text-gray-700 hover:bg-gray-50 hover:shadow-sm"
+                    : "text-gray-800 hover:bg-gray-50 hover:shadow-sm hover:text-gray-900"
                 }`}
               >
                 <div
                   className="w-4 h-4 rounded-full flex-shrink-0 ring-1 ring-white shadow-sm"
                   style={{ backgroundColor: list.color || '#6366f1' }}
                 />
-                <span className="flex-1 font-medium text-sm leading-5 truncate pr-8">
+                <span className={`flex-1 font-medium text-sm leading-5 truncate pr-8 ${
+                  selectedListId === list.Id ? 'text-primary' : 'text-gray-900'
+                }`}>
                   {list.name}
                 </span>
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full font-medium flex-shrink-0">
+                <span className="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full font-medium flex-shrink-0">
                   {getTaskCount(list.Id)}
                 </span>
               </button>
