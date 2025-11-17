@@ -5,8 +5,8 @@ import Button from '@/components/atoms/Button'
 import Loading from '@/components/ui/Loading'
 import Empty from '@/components/ui/Empty'
 import ErrorView from '@/components/ui/ErrorView'
+import Sidebar from '@/components/organisms/Sidebar'
 import { getApperClient } from '@/services/apperClient'
-
 const Projects = () => {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
@@ -232,211 +232,239 @@ const Projects = () => {
   if (loading) return <Loading />
   if (error) return <ErrorView message={error} onRetry={loadProjects} />
 
+const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
-          <p className="text-gray-600 mt-1">Manage your projects and track progress</p>
+    <div className="flex h-screen bg-gray-50">
+      <Sidebar 
+        selectedListId="projects"
+        onSelectList={() => {}}
+        isMobileOpen={isMobileSidebarOpen}
+        onMobileClose={() => setIsMobileSidebarOpen(false)}
+      />
+      
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Mobile Header */}
+        <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-gray-200">
+          <button
+            onClick={() => setIsMobileSidebarOpen(true)}
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <ApperIcon name="Menu" size={20} />
+          </button>
+          <h1 className="text-lg font-semibold text-gray-900">Projects</h1>
+          <div className="w-10" /> {/* Spacer for centering */}
         </div>
-        <Button onClick={handleAddNew} className="btn-primary">
-          <ApperIcon name="Plus" size={16} className="mr-2" />
-          Add Project
-        </Button>
-      </div>
 
-      {projects.length === 0 ? (
-        <Empty 
-          icon="FolderPlus" 
-          title="No projects yet" 
-          description="Get started by creating your first project"
-          action={
-            <Button onClick={handleAddNew} className="btn-primary mt-4">
-              <ApperIcon name="Plus" size={16} className="mr-2" />
-              Create Project
-            </Button>
-          }
-        />
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <div key={project.Id} className="card p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 truncate">
-                  {project.name_c || 'Untitled Project'}
-                </h3>
-                <div className="flex gap-2 ml-2">
-                  <Button 
-                    onClick={() => handleEdit(project)}
-                    className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  >
-                    <ApperIcon name="Edit" size={16} />
-                  </Button>
-                  <Button 
-                    onClick={() => handleDelete(project)}
-                    className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  >
-                    <ApperIcon name="Trash2" size={16} />
-                  </Button>
-                </div>
-              </div>
-
-              {project.description_c && (
-                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                  {project.description_c}
-                </p>
-              )}
-
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(project.status_c)}`}>
-                  {project.status_c || 'Active'}
-                </span>
-                <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(project.priority_c)}`}>
-                  {project.priority_c || 'Medium'} Priority
-                </span>
-              </div>
-
-              {(project.startDate_c || project.endDate_c) && (
-                <div className="text-xs text-gray-500 space-y-1">
-                  {project.startDate_c && (
-                    <div className="flex items-center gap-1">
-                      <ApperIcon name="Calendar" size={12} />
-                      <span>Start: {new Date(project.startDate_c).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                  {project.endDate_c && (
-                    <div className="flex items-center gap-1">
-                      <ApperIcon name="Calendar" size={12} />
-                      <span>End: {new Date(project.endDate_c).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Project Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto">
+          <div className="p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">
-                {editingProject ? 'Edit Project' : 'Create New Project'}
-              </h2>
-              <Button 
-                onClick={handleCloseForm}
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg"
-              >
-                <ApperIcon name="X" size={20} />
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
+                <p className="text-gray-600 mt-1">Manage your projects and track progress</p>
+              </div>
+              <Button onClick={handleAddNew} className="btn-primary">
+                <ApperIcon name="Plus" size={16} className="mr-2" />
+                Add Project
               </Button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Project Name *
-                </label>
-                <input
-                  type="text"
-                  value={formData.name_c}
-                  onChange={(e) => setFormData(prev => ({...prev, name_c: e.target.value}))}
-                  className="input-field"
-                  placeholder="Enter project name"
-                  required
-                />
-              </div>
+            {projects.length === 0 ? (
+              <Empty 
+                icon="FolderPlus" 
+                title="No projects yet" 
+                description="Get started by creating your first project"
+                action={
+                  <Button onClick={handleAddNew} className="btn-primary mt-4">
+                    <ApperIcon name="Plus" size={16} className="mr-2" />
+                    Create Project
+                  </Button>
+                }
+              />
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {projects.map((project) => (
+                  <div key={project.Id} className="card p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        {project.name_c || 'Untitled Project'}
+                      </h3>
+                      <div className="flex gap-2 ml-2">
+                        <Button 
+                          onClick={() => handleEdit(project)}
+                          className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        >
+                          <ApperIcon name="Edit" size={16} />
+                        </Button>
+                        <Button 
+                          onClick={() => handleDelete(project)}
+                          className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <ApperIcon name="Trash2" size={16} />
+                        </Button>
+                      </div>
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={formData.description_c}
-                  onChange={(e) => setFormData(prev => ({...prev, description_c: e.target.value}))}
-                  className="input-field resize-none"
-                  rows="3"
-                  placeholder="Enter project description"
-                />
-              </div>
+                    {project.description_c && (
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                        {project.description_c}
+                      </p>
+                    )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Status
-                  </label>
-                  <select
-                    value={formData.status_c}
-                    onChange={(e) => setFormData(prev => ({...prev, status_c: e.target.value}))}
-                    className="input-field"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Completed">Completed</option>
-                    <option value="On Hold">On Hold</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(project.status_c)}`}>
+                        {project.status_c || 'Active'}
+                      </span>
+                      <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(project.priority_c)}`}>
+                        {project.priority_c || 'Medium'} Priority
+                      </span>
+                    </div>
+
+                    {(project.startDate_c || project.endDate_c) && (
+                      <div className="text-xs text-gray-500 space-y-1">
+                        {project.startDate_c && (
+                          <div className="flex items-center gap-1">
+                            <ApperIcon name="Calendar" size={12} />
+                            <span>Start: {new Date(project.startDate_c).toLocaleDateString()}</span>
+                          </div>
+                        )}
+                        {project.endDate_c && (
+                          <div className="flex items-center gap-1">
+                            <ApperIcon name="Calendar" size={12} />
+                            <span>End: {new Date(project.endDate_c).toLocaleDateString()}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Project Form Modal */}
+            {showForm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div className="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-semibold text-gray-900">
+                      {editingProject ? 'Edit Project' : 'Create New Project'}
+                    </h2>
+                    <Button 
+                      onClick={handleCloseForm}
+                      className="p-2 text-gray-400 hover:text-gray-600 rounded-lg"
+                    >
+                      <ApperIcon name="X" size={20} />
+                    </Button>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Project Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.name_c}
+                        onChange={(e) => setFormData(prev => ({...prev, name_c: e.target.value}))}
+                        className="input-field"
+                        placeholder="Enter project name"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Description
+                      </label>
+                      <textarea
+                        value={formData.description_c}
+                        onChange={(e) => setFormData(prev => ({...prev, description_c: e.target.value}))}
+                        className="input-field resize-none"
+                        rows="3"
+                        placeholder="Enter project description"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Status
+                        </label>
+                        <select
+                          value={formData.status_c}
+                          onChange={(e) => setFormData(prev => ({...prev, status_c: e.target.value}))}
+                          className="input-field"
+                        >
+                          <option value="Active">Active</option>
+                          <option value="Completed">Completed</option>
+                          <option value="On Hold">On Hold</option>
+                          <option value="Cancelled">Cancelled</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Priority
+                        </label>
+                        <select
+                          value={formData.priority_c}
+                          onChange={(e) => setFormData(prev => ({...prev, priority_c: e.target.value}))}
+                          className="input-field"
+                        >
+                          <option value="High">High</option>
+                          <option value="Medium">Medium</option>
+                          <option value="Low">Low</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Start Date
+                        </label>
+                        <input
+                          type="date"
+                          value={formData.startDate_c}
+                          onChange={(e) => setFormData(prev => ({...prev, startDate_c: e.target.value}))}
+                          className="input-field"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          End Date
+                        </label>
+                        <input
+                          type="date"
+                          value={formData.endDate_c}
+                          onChange={(e) => setFormData(prev => ({...prev, endDate_c: e.target.value}))}
+                          className="input-field"
+                          min={formData.startDate_c}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <Button type="submit" className="btn-primary flex-1">
+                        {editingProject ? 'Update Project' : 'Create Project'}
+                      </Button>
+                      <Button 
+                        type="button" 
+                        onClick={handleCloseForm}
+                        className="btn-secondary"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Priority
-                  </label>
-                  <select
-                    value={formData.priority_c}
-                    onChange={(e) => setFormData(prev => ({...prev, priority_c: e.target.value}))}
-                    className="input-field"
-                  >
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                  </select>
-                </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.startDate_c}
-                    onChange={(e) => setFormData(prev => ({...prev, startDate_c: e.target.value}))}
-                    className="input-field"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.endDate_c}
-                    onChange={(e) => setFormData(prev => ({...prev, endDate_c: e.target.value}))}
-                    className="input-field"
-                    min={formData.startDate_c}
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <Button type="submit" className="btn-primary flex-1">
-                  {editingProject ? 'Update Project' : 'Create Project'}
-                </Button>
-                <Button 
-                  type="button" 
-                  onClick={handleCloseForm}
-                  className="btn-secondary"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
