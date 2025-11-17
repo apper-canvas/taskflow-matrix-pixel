@@ -40,9 +40,10 @@ class TaskService {
     
     const newTask = {
       Id: this.getNextId(),
-      ...taskData,
+...taskData,
       completed: false,
       archived: false,
+      attachments: taskData.attachments || [],
       createdAt: new Date().toISOString(),
       completedAt: null
     }
@@ -61,8 +62,9 @@ class TaskService {
     }
 
     this.tasks[index] = {
-      ...this.tasks[index],
+...this.tasks[index],
       ...data,
+      attachments: data.attachments || this.tasks[index].attachments || [],
       Id: this.tasks[index].Id // Ensure Id doesn't change
     }
 

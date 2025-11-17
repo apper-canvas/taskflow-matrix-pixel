@@ -9,13 +9,152 @@ import { formatDateForInput, createDateFromInput } from "@/utils/dateUtils"
 import { taskService } from "@/services/api/taskService"
 import { listService } from "@/services/api/listService"
 
+const FileUpload = ({ files, onFilesChange, className = "" }) => {
+  const [isDragging, setIsDragging] = useState(false)
+
+  const validateFile = (file) => {
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+      'image/jpeg',
+      'image/jpg', 
+      'image/png',
+      'image/gif'
+    ]
+
+    if (file.size > maxSize) {
+      toast.error(`File "${file.name}" is too large. Maximum size is 5MB.`)
+      return false
+    }
+
+    if (!allowedTypes.includes(file.type)) {
+      toast.error(`File type "${file.type}" is not supported.`)
+      return false
+    }
+
+    return true
+  }
+
+  const processFiles = async (fileList) => {
+    const validFiles = Array.from(fileList).filter(validateFile)
+    
+    const processedFiles = await Promise.all(
+      validFiles.map(async (file) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            resolve({
+              id: Date.now() + Math.random(),
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              data: e.target.result
+            })
+          }
+          reader.readAsDataURL(file)
+        })
+      })
+    )
+
+    onFilesChange([...files, ...processedFiles])
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
+    processFiles(e.dataTransfer.files)
+  }
+
+  const handleFileSelect = (e) => {
+    processFiles(e.target.files)
+    e.target.value = ''
+  }
+
+  const removeFile = (fileId) => {
+    onFilesChange(files.filter(f => f.id !== fileId))
+  }
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i]
+  }
+
+  const getFileIcon = (type) => {
+    if (type.startsWith('image/')) return 'Image'
+    if (type === 'application/pdf') return 'FileText'
+    if (type.includes('word') || type === 'text/plain') return 'FileText'
+    return 'File'
+  }
+
+  return (
+    <div className={className}>
+      <div
+        className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${
+          isDragging 
+            ? 'border-primary bg-primary/5' 
+            : 'border-gray-300 hover:border-primary/50 hover:bg-gray-50'
+        }`}
+        onDrop={handleDrop}
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false) }}
+      >
+        <ApperIcon name="Upload" size={32} className="mx-auto text-gray-400 mb-3" />
+        <p className="text-gray-600 mb-2">
+          Drag and drop files here, or{' '}
+          <label className="text-primary hover:text-secondary cursor-pointer font-medium">
+            browse
+            <input
+              type="file"
+              multiple
+              className="hidden"
+              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif"
+              onChange={handleFileSelect}
+            />
+          </label>
+        </p>
+        <p className="text-sm text-gray-500">
+          Supports PDF, DOC, DOCX, TXT, JPG, PNG, GIF (max 5MB each)
+        </p>
+      </div>
+
+      {files.length > 0 && (
+        <div className="mt-4 space-y-2">
+          <h4 className="text-sm font-medium text-gray-700">Uploaded Files ({files.length})</h4>
+          {files.map((file) => (
+            <div key={file.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+              <ApperIcon name={getFileIcon(file.type)} size={20} className="text-gray-500" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">{file.name}</p>
+                <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+              </div>
+              <button
+                onClick={() => removeFile(file.id)}
+                className="p-1 hover:bg-gray-200 rounded transition-colors"
+                type="button"
+              >
+                <ApperIcon name="X" size={16} className="text-gray-500" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 const TaskForm = ({ task, lists, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
-    title: task?.title || "",
+title: task?.title || "",
     description: task?.description || "",
     priority: task?.priority || "medium",
     dueDate: task?.dueDate ? formatDateForInput(task.dueDate) : "",
-    listId: task?.listId || lists[0]?.id || ""
+    listId: task?.listId || lists[0]?.id || "",
+    attachments: task?.attachments || []
   })
 
   const [errors, setErrors] = useState({})
@@ -46,11 +185,12 @@ const TaskForm = ({ task, lists, onSave, onCancel }) => {
     setLoading(true)
 
     try {
-      const taskData = {
+const taskData = {
         ...formData,
         title: formData.title.trim(),
         description: formData.description.trim(),
-        dueDate: formData.dueDate ? createDateFromInput(formData.dueDate) : null
+        dueDate: formData.dueDate ? createDateFromInput(formData.dueDate) : null,
+        attachments: formData.attachments
       }
 
       if (task) {
@@ -70,11 +210,15 @@ const TaskForm = ({ task, lists, onSave, onCancel }) => {
     }
   }
 
-  const handleInputChange = (field, value) => {
+const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: null }))
     }
+  }
+
+  const handleFilesChange = (files) => {
+    setFormData(prev => ({ ...prev, attachments: files }))
   }
 
   return (
@@ -93,7 +237,7 @@ const TaskForm = ({ task, lists, onSave, onCancel }) => {
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+<form onSubmit={handleSubmit} className="space-y-4">
             <FormField
               label="Task Title"
               required
@@ -133,6 +277,13 @@ const TaskForm = ({ task, lists, onSave, onCancel }) => {
                 value={formData.listId}
                 onChange={(value) => handleInputChange("listId", value)}
                 lists={lists}
+              />
+            </FormField>
+
+            <FormField label="Attachments">
+              <FileUpload
+                files={formData.attachments}
+                onFilesChange={handleFilesChange}
               />
             </FormField>
 

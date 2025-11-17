@@ -100,7 +100,7 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
             </div>
           </div>
 
-          {task.description && (
+{task.description && (
             <div>
               <p className={`text-gray-600 text-sm mt-1 ${!isExpanded ? "line-clamp-2" : ""}`}>
                 {task.description}
@@ -113,6 +113,49 @@ const TaskCard = ({ task, onEdit, onUpdate }) => {
                   {isExpanded ? "Show less" : "Show more"}
                 </button>
               )}
+            </div>
+          )}
+
+          {task.attachments && task.attachments.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              <div className="flex items-center gap-2 mb-2">
+                <ApperIcon name="Paperclip" size={14} className="text-gray-500" />
+                <span className="text-xs font-medium text-gray-700">
+                  {task.attachments.length} Attachment{task.attachments.length > 1 ? 's' : ''}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 gap-1">
+                {task.attachments.slice(0, isExpanded ? task.attachments.length : 2).map((file) => (
+                  <div key={file.id} className="flex items-center gap-2 p-2 bg-gray-50 rounded text-xs">
+                    <ApperIcon 
+                      name={
+                        file.type.startsWith('image/') ? 'Image' : 
+                        file.type === 'application/pdf' ? 'FileText' : 
+                        'File'
+                      } 
+                      size={14} 
+                      className="text-gray-500 flex-shrink-0" 
+                    />
+                    <span className="truncate flex-1 text-gray-700">{file.name}</span>
+                    <a
+                      href={file.data}
+                      download={file.name}
+                      className="text-primary hover:text-secondary transition-colors"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ApperIcon name="Download" size={14} />
+                    </a>
+                  </div>
+                ))}
+                {!isExpanded && task.attachments.length > 2 && (
+                  <button
+                    onClick={() => setIsExpanded(true)}
+                    className="text-xs text-primary hover:text-secondary transition-colors text-left p-1"
+                  >
+                    +{task.attachments.length - 2} more files
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
