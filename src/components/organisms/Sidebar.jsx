@@ -1,17 +1,20 @@
-import { useState, useEffect } from "react"
-import { toast } from "react-toastify"
-import ApperIcon from "@/components/ApperIcon"
-import Button from "@/components/atoms/Button"
-import { listService } from "@/services/api/listService"
-import { taskService } from "@/services/api/taskService"
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { listService } from "@/services/api/listService";
+import { taskService } from "@/services/api/taskService";
+import ApperIcon from "@/components/ApperIcon";
+import Projects from "@/components/pages/Projects";
+import Button from "@/components/atoms/Button";
 
 const Sidebar = ({ selectedListId, onSelectList, isMobileOpen, onMobileClose }) => {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [lists, setLists] = useState([])
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(false)
   const [newListName, setNewListName] = useState("")
   const [isAddingList, setIsAddingList] = useState(false)
-
   const loadData = async () => {
     setLoading(true)
     try {
@@ -110,7 +113,7 @@ const Sidebar = ({ selectedListId, onSelectList, isMobileOpen, onMobileClose }) 
       {/* Lists */}
       <div className="flex-1 overflow-y-auto p-4">
         <div className="space-y-2">
-          {/* All Tasks */}
+{/* All Tasks */}
           <button
             onClick={() => {
               onSelectList("all")
@@ -127,6 +130,22 @@ const Sidebar = ({ selectedListId, onSelectList, isMobileOpen, onMobileClose }) 
             <span className="text-sm text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
               {getTaskCount("all")}
             </span>
+          </button>
+
+          {/* Projects */}
+          <button
+            onClick={() => {
+              navigate("/projects")
+              onMobileClose?.()
+            }}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${
+              location.pathname === "/projects"
+                ? "bg-gradient-to-r from-primary/10 to-secondary/10 text-primary border-l-4 border-primary"
+                : "text-gray-700 hover:bg-gray-50"
+            }`}
+          >
+            <ApperIcon name="Folder" size={18} />
+            <span className="flex-1 font-medium">Projects</span>
           </button>
 
           {/* Custom Lists */}

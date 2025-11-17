@@ -82,11 +82,19 @@
           }
         ]
       }
-},
-    "projects": {
-      "path": "/projects",
-      "protected": true,
-      "component": "Projects"
+}
+  },
+  "/projects": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "User must be logged in to view projects",
+            "rule": "authenticated"
+          }
+        ]
+      },
+      "redirectOnDeny": "/login"
     }
   }
 }
